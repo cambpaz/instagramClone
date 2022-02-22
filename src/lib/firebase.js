@@ -1,8 +1,8 @@
 // import { seedDatabase } from "../seed";
 
-import Firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import Firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 
 
 const firebaseConfig = {
