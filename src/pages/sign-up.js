@@ -34,7 +34,6 @@ export default function SignUp() {
         const createdUserResult = await firebase
         .auth()
         .createUserWithEmailAndPassword(emailAdress, password);
-        console.log('createdUserResult' + createdUserResult);
         //authentication
         await createdUserResult.user.updateProfile({
           displayName: username
@@ -55,7 +54,9 @@ export default function SignUp() {
         setFullName('');
         setEmailAdress('');
         setPassword('');
-        setUsername('')
+        setUsername('');
+        setError('Username already taken. Please try another one.')
+
       }
     } else {
       setUsername('');

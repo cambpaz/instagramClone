@@ -9,6 +9,5 @@ export default async function doesUsernameExist(username) {
         .collection('users')
         .where('username', '==', username.toLowerCase())
         .get();
-    console.log(result.docs.length);
     return result.docs.length > 0; // big O notation
 }
