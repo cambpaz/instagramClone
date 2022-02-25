@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import * as ROUTES from './constants/routes'
-import UserContext from './context/userContext';  
+import UserContext from './context/userContext';
 import useAuthListener from './hooks/use-auth-listener';
 
 const Dashboard = lazy(() => import('./pages/dashboard'));
@@ -15,10 +15,9 @@ const NotFound = lazy(() => import('./pages/not-found'));
 
 function App() {
   const { user } = useAuthListener();
-  console.log("🚀 ~ file: App.js ~ line 18 ~ App ~ user", user)
-  
+
   return (
-    <UserContext.Provider value={ user }>
+    <UserContext.Provider value={{ user }}>
       <Router>
         <Suspense fallback={<p>Loading...</p>}>
           <Switch>
