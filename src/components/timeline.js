@@ -1,8 +1,9 @@
-import React from 'react'
 
 const Timeline = () => {
     return (
-        <div>Timeline</div>
+        <div className="container col-span-2">
+            
+        </div>
     )
 }
 
