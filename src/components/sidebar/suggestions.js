@@ -1,9 +1,11 @@
 import propTypes from "prop-types";
 import { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import { getSuggestedProfiles } from "../../services/firebase";
+import SuggestedProfile from "../suggestedProfile";
 
 
-export default function Suggestions({ userId, following }) {
+export default function Suggestions({ userId, following, loggedInUserDocId }) {
     const [profiles, setProfiles] = useState(null);
 
     useEffect(() => {
@@ -15,14 +17,32 @@ export default function Suggestions({ userId, following }) {
             suggestedProfiles();
         }
     }, [userId]);
-    return (
-        <>
-            <p>Im Suggestions</p>
-        </>
-    )
-};
+
+    return !profiles ? (
+        <Skeleton count={1} height={156} className="mt-5" />
+    ) : profiles.length > 0 ? (
+        <div className="rounded flex flex-col">
+            <div className="text-sm flex items-center align-items justify-between mb-2">
+                <p className="font-bold text-gray-base">Suggestions for you</p>
+            </div>
+            <div className="mt-4 grid gap-5">
+                {profiles.map((profile) => (
+                    <SuggestedProfile
+                        key={profile.docId}
+                        sugProfDocId={profile.docId}
+                        username={profile.username}
+                        profileId={profile.userId}
+                        userId={userId}
+                        loggedInUserDocId={loggedInUserDocId}
+                        />
+                    ))}
+            </div>
+        </div>
+    ) : null;
+}
 
 Suggestions.propTypes = {
     userId: propTypes.string,
-    following: propTypes.array
+    following: propTypes.array,
+    loggedInUserDocId: propTypes.string
 }

@@ -29,3 +29,7 @@ export async function getSuggestedProfiles(userID, following) {
     // we first do a map of the docs to obtain all the profiles and then we filter so we dont get out profile and the ones we already follow
     return result.docs.map((user) => ({...user.data(), docId: user.id})).filter((profile) => profile.userId !== userID && !following.includes(profile.userId))
 }
+
+export async function updateLoggedInUsersFollowing(userID, profileId, loggedInUserDocId) {
+    
+}
