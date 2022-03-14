@@ -52,3 +52,26 @@ export async function updateFollowedUserFollowers(profileDocId, loggedInUserDocI
         : FieldValue.arrayUnion(loggedInUserDocId)
     })
 }
+
+export async function getPhotos(userID, following) {
+    const result = firebase.firestore.collection('photos').where('userId', 'in', following).get();
+    const userFollowedPhotos = result.doc.map((photo) => ({
+        ...photo.data(),
+        docId: photo.id
+    })
+    );
+    console.log("🚀 ~ file: firebase.js ~ line 62 ~ userFollowedPhotos ~ userFollowedPhotos", userFollowedPhotos)
+    // now i want to know wether the user has liked the photo or not
+    const photoWithUserDetails = await Promise.all(userFollowedPhotos.map(async(photo) => {
+        let hasUserLikedPhoto = false;
+        if(photo.likes.includes(userID)) {
+            hasUserLikedPhoto = true;
+        }
+        const user = await getUserbyID(photo.userId);
+        console.log("🚀 ~ file: firebase.js ~ line 71 ~ photoWithUserDetails ~ user", user)
+        
+        const { username } = user[0];
+        return { username, ...photo, hasUserLikedPhoto};
+    }))
+    return photoWithUserDetails;
+}
