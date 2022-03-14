@@ -1,4 +1,3 @@
-import './wdyr';
 import React, {
   lazy,
   Suspense

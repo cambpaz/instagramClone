@@ -27,9 +27,28 @@ export async function getUserbyID(userID) {
 export async function getSuggestedProfiles(userID, following) {
     const result = await firebase.firestore().collection('users').limit(10).get();
     // we first do a map of the docs to obtain all the profiles and then we filter so we dont get out profile and the ones we already follow
-    return result.docs.map((user) => ({...user.data(), docId: user.id})).filter((profile) => profile.userId !== userID && !following.includes(profile.userId))
+    return result.docs.map((user) => ({
+        ...user.data(),
+        docId: user.id
+    })).filter((profile) => profile.userId !== userID && !following.includes(profile.userId))
 }
 
-export async function updateLoggedInUsersFollowing(userID, profileId, loggedInUserDocId) {
-    
+export async function updateLoggedInUserFollowing(
+    loggedInUserDocId, // my doc id (the user thats logged in)
+    profileId, //the user i want to follow ID (NOT DOC ID)
+    isFollowingProfile // check if im following it
+) {
+    return firebase.firestore().collection('users').doc(loggedInUserDocId).update({
+        following: isFollowingProfile ?
+            FieldValue.arrayRemove(profileId) :
+            FieldValue.arrayUnion(profileId)
+    })
+}
+
+export async function updateFollowedUserFollowers(profileDocId, loggedInUserDocId, isFollowingProfile) {
+    return firebase.firestore().collection('users').doc(profileDocId).update({
+        followers: isFollowingProfile 
+        ? FieldValue.arrayRemove(loggedInUserDocId)
+        : FieldValue.arrayUnion(loggedInUserDocId)
+    })
 }
